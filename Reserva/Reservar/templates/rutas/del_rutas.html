@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+
+{% load bootstrap5 %}
+
+{% block title %} Eliminar Ruta {% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col border-bottom">
+            <h1 style="color: red; padding-left: 350px;">Eliminar Ruta</h1>
+        </div>
+    </div>
+
+    <div class="row" style="background-color: grey;">
+        <hr>
+        <form method="POST">
+            <div class="d-flex justify-content-center">
+                <h4>¿Seguro que desea eliminar la ruta de "<b><i>{{ ruta.origen }}</i></b>" a "<b><i>{{ ruta.destino }}</i></b>" de Rutas?</h4>
+            </div>
+            {% csrf_token %}
+            {{ formulario }}
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-secondary btn-sm" href="{% url 'list_ruta' %}">Cancelar</a>
+                <input class="btn btn-danger btn-sm" type="submit" value="Confirmar">
+            </div>
+        </form>
+    </div>
+    
+{% endblock %}

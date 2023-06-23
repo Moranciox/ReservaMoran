@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+
+{% load bootstrap5 %}
+
+{% block title %} Lista de Rutas {% endblock %}
+
+{% block content %}
+    <div class="container-flex m-3">
+        <div class="row">
+            <div class="col border-bottom">
+                <h1 style="color: red; padding-left: 350px;">Listado de Rutas</h1>
+            </div >
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" style="background-color: grey;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Tiempo Estimado</th>
+                                <th>
+                                    Acciones
+                                    <a href="/add_rutas/" class="text-decoration-none text-black">
+                                        <button type="button" class="btn btn-success">Añadir Ruta</button>
+                                    </a>
+                                </th>
+                                
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for ruta in rutas %}
+                                <tr>
+                                    <td>{{ ruta.id }}</td>
+                                    <td>{{ ruta.origen }}</td>
+                                    <td>{{ ruta.destino }}</td>
+                                    <td>{{ ruta.tiempoEstimado }}</td>
+                                    <td>
+                                        <a class="btn btn-secondary btn-sm" href="{% url 'edit_ruta' ruta.id %}">Editar</a>
+                                        <a class="btn btn-danger btn-sm" href="{% url 'del_ruta' ruta.id %}">Eliminar</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

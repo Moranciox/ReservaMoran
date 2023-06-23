@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+
+{% load crispy_forms_tags %}
+
+{% load bootstrap5 %}
+
+{% block title %} Editar Ruta {% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col border-bottom">
+            <h1 style="color: red; padding-left: 350px;">Editar la Ruta de: <b><i>{{ ruta.origen }}</i></b> a <b><i>{{ ruta.destino }}</i></b></h1>
+        </div>
+    </div>
+    <div class="row" style="background-color: grey;">
+        <div class="col">
+            {% bootstrap_messages %}
+            <form method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <a href="/rutas/"><button type="button" class="btn btn-dark"> Volver</button></a>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

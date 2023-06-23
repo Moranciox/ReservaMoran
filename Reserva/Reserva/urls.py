@@ -15,24 +15,30 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
 #from Reservar.views import BusListView, BusCreateView, BusUpdateView, BusDeleteView
-from Reservar.views import index, formBus, editarBus, eliminarBus
-
+from Reservar.views import *
 app_name = 'Reservar'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('index/', index, name='index'),
     path('', index, name='index'),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path('formBus/', formBus, name='formBus'),
-    path('buses/editar/<int:bus_id>/', editarBus, name='editar_bus'),
-    path('buses/eliminar/<int:bus_id>/', eliminarBus, name='eliminar_bus'),
+    path('admin/', admin.site.urls),
 
+    path('buses/', list_bus, name = 'list_bus'),
+    path('add_buses/', add_bus, name = 'add_bus'),
+    path('edit_buses/<int:pk>/', edit_bus, name = 'edit_bus'),
+    path('del_buses/<int:pk>/', del_bus, name = 'del_bus'),
 
+    path('rutas/', list_ruta, name = 'list_ruta'),
+    path('add_rutas/', add_ruta, name = 'add_ruta'),
+    path('edit_rutas/<int:pk>/', edit_ruta, name = 'edit_ruta'),
+    path('del_rutas/<int:pk>/', del_ruta, name = 'del_ruta'),
 
-    #path('buses/', BusListView.as_view(), name='bus_list'),
-    #path('buses/create/', BusCreateView.as_view(), name='bus_create'),
-    #path('buses/update/<int:pk>/', BusUpdateView.as_view(), name='bus_update'),
-    #path('buses/delete/<int:pk>/', BusDeleteView.as_view(), name='bus_delete'),
+    path('clientes/', list_cli, name = 'list_cli'),
+
+    path('accounts/', include('django.contrib.auth.urls')),
+
 ]
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

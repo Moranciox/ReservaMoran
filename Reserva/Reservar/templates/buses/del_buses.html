@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+{% load bootstrap5 %}
+
+{% block title %} Eliminar Bus {% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col border-bottom">
+            <h1 style="color: red; padding-left: 350px;">Eliminar Bus</h1>
+        </div>
+    </div>
+
+    <div class="row" style="background-color: grey;">
+        <hr class="align-items-center">
+        <form method="POST">
+            <div class="d-flex justify-content-center">
+                <h4>¿Seguro que desea eliminar "<b><i>{{ bus.patente }}</i></b>" de Buses?</h4>
+            </div>
+            {% csrf_token %}
+            {{ formulario }}
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-secondary btn-sm" href="{% url 'list_bus' %}">Cancelar</a>
+                <input class="btn btn-danger btn-sm" type="submit" value="Confirmar">
+            </div>
+        </form>
+    </div>
+{% endblock %}
