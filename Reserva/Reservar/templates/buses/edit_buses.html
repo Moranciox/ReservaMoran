@@ -10,11 +10,11 @@
 {% block content %}
     <div class="row">
         <div class="col border-bottom">
-            <h1 style="color: red; padding-left: 350px;">Editar el Bus: <b><i>{{ bus.patente }}</i></b>?</h1>
+            <h1 style="color: red;" class="d-flex justify-content-center">Editar el Bus: <b><i>{{ bus.patente }}</i></b>?</h1>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="background-color: grey;">
         <div class="col">
             {% bootstrap_messages %}
             <form method="POST">
