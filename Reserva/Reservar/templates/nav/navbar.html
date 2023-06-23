@@ -1,16 +1,16 @@
 {% load static %}
+
 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
     <a href="{% url 'index' %}" class="navbar-brand mx-4 mb-3">
         <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Administración</h3>
     </a>
-            <!--<button id="mostrarHTMLBtn">Mostrar HTML</button>-->
+    <button id="mostrarHTMLBtn">Mostrar HTML</button>
+
     <div class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
             <div class="dropdown-menu bg-secondary border-0">
-                <a href="button.html" class="dropdown-item">Buttons</a>
-                <a id="mostrarHTMLBtn" href="#" class="dropdown-item">Buttons</a>
-                <a href="typography.html" class="dropdown-item">Typography</a>
-                <a href="element.html" class="dropdown-item">Other Elements</a>
+                <a href="{% url 'formBus' %}" class="dropdown-item">Buses</a>
+                
             </div>
     </div>
 

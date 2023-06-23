@@ -1,13 +1,11 @@
 // main.js
 document.addEventListener("DOMContentLoaded", function () {
-  // Obtén una referencia al enlace y al div de contenido dinámico
-  const cargarContenidoLink = document.getElementById("cargarContenidoLink");
+  // Obtén una referencia al botón y al div de contenido dinámico
+  const mostrarHTMLBtn = document.getElementById("mostrarHTMLBtn");
   const contenidoDinamico = document.getElementById("contenidoDinamico");
-
-  // Asocia un evento de clic al enlace
-  cargarContenidoLink.addEventListener("click", function (event) {
-    event.preventDefault(); // Evita el comportamiento predeterminado del enlace
-    
+  
+  // Asocia un evento de clic al botón
+  mostrarHTMLBtn.addEventListener("click", function () {
     // Realiza una solicitud GET para cargar el contenido del archivo de plantilla
     fetch("/formBus/")
       .then(response => response.text())

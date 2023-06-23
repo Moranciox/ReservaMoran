@@ -15,7 +15,7 @@
         {% csrf_token %}
         <button type="submit">Eliminar</button>
     </form>
-    <a href="/buses/">Volver a la lista de buses</a>
+    <a href="{% url 'formBus' %}">Volver a la lista de buses</a>
 </body>
 </html>
 

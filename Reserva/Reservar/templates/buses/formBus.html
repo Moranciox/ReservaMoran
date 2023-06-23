@@ -11,6 +11,9 @@
                     <th>Patente</th>
                     <th>Asientos</th>
                     <th>Acciones</th>
+                    <th>
+                        <a href="{% url 'formBus' %}" class="btn btn-primary">Agregar</a>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -28,14 +31,7 @@
             </tbody>
         </table>
         <hr>
-        <h2>Crear Nuevo Bus</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {% bootstrap_form formulario %}
-            {% buttons %}
-                <button class="btn btn-primary" type="submit">Guardar</button>
-            {% endbuttons %}
-        </form>
+        <a href="{% url 'index' %}" class="btn btn-danger">Volver al Menu</a>
         {% bootstrap_messages %}
     </div>
     {% endif %}
