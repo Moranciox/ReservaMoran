@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+{% load bootstrap5 %}
+
+{% block title %}Eliminar Disponibilidad{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Eliminar Disponibilidad</h1>
+        <p>¿Estás seguro de que deseas eliminar la siguiente disponibilidad?</p>
+        <p>ID: {{ disponibilidad.id }}</p>
+        <p>Horario: {{ disponibilidad.horario }}</p>
+        <p>Fecha: {{ disponibilidad.fecha }}</p>
+        <!-- Muestra los demás campos aquí -->
+
+        <form method="post">
+            {% csrf_token %}
+            {% buttons %}
+                <button class="btn btn-danger" type="submit">Eliminar</button>
+                <a class="btn btn-secondary" href="{% url 'list_disponibilidad' %}">Cancelar</a>
+            {% endbuttons %}
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservar Pasaje</title>
+    <!-- Incluir enlaces a Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Reservar Pasaje</h1>
+        <h2>Detalles del Viaje:</h2>
+        <p>Fecha: {{ disponibilidad.fecha }}</p>
+        <p>Hora: {{ disponibilidad.horario }}</p>
+        <p>Ruta: {{ disponibilidad.ruta }}</p>
+
+        <h2>Asientos Disponibles:</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-check">
+                {% for asiento in asientos_disponibles %}
+                    <input type="radio" id="asiento_{{ asiento.numero }}" name="asiento" value="{{ asiento.numero }}">
+                    <label for="asiento_{{ asiento.numero }}">Asiento {{ asiento.numero }}</label><br>
+                {% endfor %}
+            </div>
+
+            <h2>Información del Cliente:</h2>
+            {{ cliente_form.as_p }}
+
+            <button type="submit" class="btn btn-primary">Reservar</button>
+        </form>
+    </div>
+
+    <!-- Scripts de Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

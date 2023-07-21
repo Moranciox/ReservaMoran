@@ -1,44 +1,39 @@
-"""Reserva URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-#from Reservar.views import BusListView, BusCreateView, BusUpdateView, BusDeleteView
+from django.conf.urls.static import static
 from Reservar.views import *
+
 app_name = 'Reservar'
 
 urlpatterns = [
-    path('', index, name='index'),
+    path('', home, name='home'),  # Redirige a la página de inicio
     path('admin/', admin.site.urls),
+    path('index/', index, name='index'),
 
-    path('buses/', list_bus, name = 'list_bus'),
-    path('add_buses/', add_bus, name = 'add_bus'),
-    path('edit_buses/<int:pk>/', edit_bus, name = 'edit_bus'),
-    path('del_buses/<int:pk>/', del_bus, name = 'del_bus'),
+    path('list_buses/', list_bus, name='list_buses'),
+    path('add_buses/', add_bus, name='add_bus'),
+    path('edit_buses/<int:pk>/', edit_bus, name='edit_bus'),
+    path('del_buses/<int:pk>/', del_bus, name='del_bus'),
 
-    path('rutas/', list_ruta, name = 'list_ruta'),
-    path('add_rutas/', add_ruta, name = 'add_ruta'),
-    path('edit_rutas/<int:pk>/', edit_ruta, name = 'edit_ruta'),
-    path('del_rutas/<int:pk>/', del_ruta, name = 'del_ruta'),
+    path('rutas/', list_ruta, name='list_ruta'),
+    path('add_rutas/', add_ruta, name='add_ruta'),
+    path('edit_rutas/<int:pk>/', edit_ruta, name='edit_ruta'),
+    path('del_rutas/<int:pk>/', del_ruta, name='del_ruta'),
 
-    path('clientes/', list_cli, name = 'list_cli'),
+    path('clientes/', list_cli, name='list_cli'),
 
     path('accounts/', include('django.contrib.auth.urls')),
 
+    path('disponibilidades/', list_disponibilidad, name='list_disponibilidad'),
+    path('disponibilidades/add/', add_disponibilidad, name='add_disponibilidad'),
+    path('disponibilidades/edit/<int:pk>/', edit_disponibilidad, name='edit_disponibilidad'),
+    path('disponibilidades/del/<int:pk>/', del_disponibilidad, name='del_disponibilidad'),
+
+    path('reserva/', buscar_rutas, name='buscar_rutas'),
+    path('reserva/<int:disponibilidad_id>/', reserva_pasaje, name='reserva_pasaje'),
 ]
+
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

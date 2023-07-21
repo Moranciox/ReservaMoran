@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmación de Reserva</title>
+    <!-- Incluir enlaces a Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<!-- Coloca aquí el código para el navbar si lo necesitas -->
+
+<!-- Contenido de la página de confirmación de reserva -->
+<div class="container mt-4">
+    <h1>Confirmación de Reserva</h1>
+    <p>¡Tu reserva ha sido exitosa!</p>
+    <p>Detalles de la reserva:</p>
+    <p><strong>Fecha:</strong> {{ disponibilidad.fecha }}</p>
+    <p><strong>Horario:</strong> {{ disponibilidad.horario }}</p>
+    <p><strong>Ruta:</strong> {{ disponibilidad.ruta.origen }} - {{ disponibilidad.ruta.destino }}</p>
+    <p><strong>Asiento:</strong> {{ disponibilidad.asiento.numero }}</p>
+    <p><strong>Cliente:</strong> {{ cliente.nombre }} {{ cliente.apellido }}</p>
+    <p><strong>Email:</strong> {{ cliente.email }}</p>
+    <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+    <p><strong>RUT:</strong> {{ cliente.rut }}</p>
+    <!-- Puedes agregar más detalles aquí si lo deseas -->
+
+    <!-- Agrega aquí botones o enlaces adicionales si es necesario -->
+
+</div>
+
+<!-- Scripts de Bootstrap -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

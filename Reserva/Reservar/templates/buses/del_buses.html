@@ -5,24 +5,35 @@
 {% block title %} Eliminar Bus {% endblock %}
 
 {% block content %}
+<style>
+    .center-block {
+        width: 50%;
+        margin: 0 auto;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: grey;
+    }
+</style>
     <div class="row">
         <div class="col border-bottom">
             <h1 style="color: red;" class="d-flex justify-content-center">Eliminar Bus</h1>
         </div>
     </div>
 
-    <div class="row" style="background-color: grey;">
-        <hr class="align-items-center">
+
+    <hr class="align-items-center">
+    <div class="center-block">
         <form method="POST">
             <div class="d-flex justify-content-center">
-                <h4>¿Seguro que desea eliminar "<b>{{ bus.patente }}</b>" de Buses?</h4>
+                <h4>Se eliminará "<b>{{ bus.patente }}</b>" de Buses</h4>
             </div>
             {% csrf_token %}
             {{ formulario }}
             <div class="d-flex justify-content-center">
-                <a class="btn btn-secondary btn-sm" href="{% url 'list_bus' %}">Cancelar</a>
-                <input class="btn btn-danger btn-sm" type="submit" value="Confirmar">
+                <a class="btn btn-secondary btn-sm" href="{% url 'list_buses' %}">Cancelar</a>
+                <input class="btn btn-danger btn-sm" type="submit" value="Confirmar" href="Reservar/templates/buses/list_buses">
             </div>
         </form>
     </div>
+
 {% endblock %}

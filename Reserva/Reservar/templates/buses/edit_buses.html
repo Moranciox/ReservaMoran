@@ -21,8 +21,8 @@
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 {% buttons %}
-                    <button class="btn btn-primary" type="submit">Guardar</button>
-                    <a href="/buses/"><button type="button" class="btn btn-dark"> Volver</button></a>
+                    <button class="btn btn-primary" type="submit" >Guardar</button>
+                    <a href="{% url 'list_buses' %}"><button type="button" class="btn btn-dark"> Volver</button></a>
                 {% endbuttons %}
             </form>
         </div>

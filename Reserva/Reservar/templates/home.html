@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inicio</title>
+    <!-- Incluir enlaces a Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">Mi Proyecto de Reservas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- Demás botones del navbar -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'buscar_rutas' %}">Reservar Pasaje</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Rutas de Hoy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">¿Quiénes somos?</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <!-- Verifica si el usuario está autenticado -->
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <!-- Muestra el nombre del usuario -->
+                        <span class="nav-link">¡Hola, {{ user.username }}!</span>
+                    </li>
+                    <li class="nav-item">
+                        <!-- Agrega el botón "Admin" al lado del nombre del usuario -->
+                        <a class="nav-link btn btn-primary" href="{% url 'index' %}">Admin</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <!-- Si el usuario no está autenticado, muestra el enlace de "Iniciar Sesión" -->
+                        <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a> 
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido de la página de inicio -->
+<div class="container mt-4">
+    <h1>Bienvenido a la página de inicio</h1>
+    <p>Aquí puedes agregar contenido para la página de inicio.</p>
+</div>
+
+<!-- Scripts de Bootstrap -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+
