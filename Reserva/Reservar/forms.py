@@ -12,7 +12,7 @@ class DisponibilidadForm(forms.ModelForm):
     horario=forms.ChoiceField(choices=horas)
     class Meta:
         model = Disponibilidad
-        fields = ['bus', 'asiento', 'ruta', 'fecha', 'horario', 'disponible']
+        fields = ['bus', 'ruta', 'fecha', 'horario', 'disponible']
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
             'ruta': forms.Select(attrs={'class': 'form-control'}, choices=[(ruta.id, str(ruta)) for ruta in Ruta.objects.all()]),

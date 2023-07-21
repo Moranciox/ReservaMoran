@@ -18,8 +18,8 @@
             {% csrf_token %}
             <div class="form-check">
                 {% for asiento in asientos_disponibles %}
-                    <input type="radio" id="asiento_{{ asiento.numero }}" name="asiento" value="{{ asiento.numero }}">
-                    <label for="asiento_{{ asiento.numero }}">Asiento {{ asiento.numero }}</label><br>
+                    <input type="checkbox" id="asiento_{{ asiento.numero }}" name="asientos" value="{{ asiento.numero }}" {% if not asiento.estado %}disabled{% endif %}>
+                    <label for="asiento_{{ asiento.numero }}" {% if not asiento.estado %}class="asiento-no-disponible"{% endif %}>Asiento {{ asiento.numero }}</label><br>
                 {% endfor %}
             </div>
 
@@ -32,5 +32,13 @@
 
     <!-- Scripts de Bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Estilos CSS para los asientos no disponibles -->
+    <style>
+        .asiento-no-disponible {
+            text-decoration: line-through;
+            color: #999;
+        }
+    </style>
 </body>
 </html>

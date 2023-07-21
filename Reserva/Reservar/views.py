@@ -9,7 +9,6 @@ from django.utils import timezone
 from .models import Bus, Ruta, Cliente, Disponibilidad, Asientos, Reserva
 ##from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import BusForm, RutaForm, CliForm, DisponibilidadForm, BusquedaRutasForm, ClienteForm
-
 def reserva_pasaje(request, disponibilidad_id):
     disponibilidad = get_object_or_404(Disponibilidad, id=disponibilidad_id)
 
@@ -17,40 +16,45 @@ def reserva_pasaje(request, disponibilidad_id):
     asientos_disponibles = Asientos.objects.filter(
         bus=disponibilidad.bus,
         estado=True,  # Marcamos el estado como disponible
-        numero__in=Asientos.objects.filter(
-            disponibilidades_asiento__fecha=disponibilidad.fecha,
-            disponibilidades_asiento__horario=disponibilidad.horario
-        ).values('numero')
+        disponibilidad__fecha=disponibilidad.fecha,
+        disponibilidad__horario=disponibilidad.horario
     )
 
     if request.method == 'POST':
-        # Obtener el asiento seleccionado y la información del cliente del formulario
-        asiento_numero = request.POST.get('asiento')
+        # Obtener los asientos seleccionados y la información del cliente del formulario
+        asientos_seleccionados = request.POST.getlist('asientos')
         cliente_form = ClienteForm(request.POST)
 
         if cliente_form.is_valid():
             cliente = cliente_form.save()  # Guardar los datos del cliente en la base de datos
 
-            # Asignar el cliente y el asiento seleccionado a la disponibilidad
-            disponibilidad.cliente = cliente
-            disponibilidad.asiento = Asientos.objects.get(bus=disponibilidad.bus, numero=asiento_numero)
-            disponibilidad.disponible = False  # Marcar la disponibilidad como no disponible
-            disponibilidad.save()
+            for asiento_numero in asientos_seleccionados:
+                # Buscar el asiento seleccionado
+                asiento = Asientos.objects.get(bus=disponibilidad.bus, numero=asiento_numero)
 
-            # Combinar la fecha y hora para obtener la fecha completa del viaje
-            fecha_reserva = datetime.combine(disponibilidad.fecha, disponibilidad.horario)
+                # Asignar el cliente y el asiento seleccionado a la disponibilidad
+                disponibilidad.cliente = cliente
+                disponibilidad.asiento = asiento
 
-            # Crear y guardar la reserva con las fechas correctas
-            reserva = Reserva(
-                fechaReserva=fecha_reserva,  # Fecha y hora del viaje
-                fechaCreacion=timezone.now(),  # Fecha de creación de la reserva (fecha actual)
-                cantidadPasajes=1,  # Puedes ajustar esto según tus necesidades
-                cliente=cliente,
-                ruta=disponibilidad.ruta,
-                bus=disponibilidad.bus,
-                asiento=disponibilidad.asiento,
-            )
-            reserva.save()
+                # Cambiar el estado del asiento a no disponible
+                asiento.estado = False
+                asiento.save()
+
+                # Marcar la disponibilidad como no disponible
+                disponibilidad.disponible = False
+                disponibilidad.save()
+
+                # Crear y guardar la reserva con las fechas correctas
+                reserva = Reserva(
+                    fechaReserva=timezone.now(),  # Fecha y hora actual de la reserva
+                    fechaCreacion=timezone.now(),  # Fecha de creación de la reserva (fecha actual)
+                    cantidadPasajes=1,  # Puedes ajustar esto según tus necesidades
+                    cliente=cliente,
+                    ruta=disponibilidad.ruta,
+                    bus=disponibilidad.bus,
+                    asiento=asiento,
+                )
+                reserva.save()
 
             # Redirigir a una página de confirmación o a donde desees
             return render(request, 'cliente/confirmacion_reserva.html', {'disponibilidad': disponibilidad, 'cliente': cliente})
@@ -223,11 +227,11 @@ def del_ruta(request, pk):
 def list_disponibilidad(request):
     disponibilidades = Disponibilidad.objects.all()
     buses = Bus.objects.all()
-    asientos = Asientos.objects.filter(bus__in=buses)
+    
     
     context = {
         'disponibilidades': disponibilidades,
-        'asientos': asientos,
+    
     }
     
     return render(request, 'disponibilidad/list_disponibilidad.html', context)
