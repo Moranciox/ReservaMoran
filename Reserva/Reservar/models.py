@@ -54,15 +54,16 @@ from django.utils import timezone
 
 class Reserva(models.Model):
     fechaReserva = models.DateTimeField(null=False)
-    fechaCreacion = models.DateTimeField(default=timezone.now)  # Agregar el atributo fechaCreacion
+    fechaCreacion = models.DateTimeField(default=timezone.now)  # Fecha de creación de la reserva (fecha actual)
     cantidadPasajes = models.IntegerField(null=False)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     ruta = models.ForeignKey(Ruta, on_delete=models.CASCADE)
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
-    asiento = models.ForeignKey(Asientos, on_delete=models.CASCADE)
+    asientos = models.ManyToManyField(Asientos)  # Agregar el campo ManyToManyField
 
     def __str__(self):
         return f"Reserva de {self.cliente} - Fecha de Reserva: {self.fechaReserva}"
+
 
 @receiver(post_save, sender=Disponibilidad)
 def crear_asientos(sender, instance, created, **kwargs):

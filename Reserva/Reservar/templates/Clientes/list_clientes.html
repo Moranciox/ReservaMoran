@@ -8,7 +8,7 @@
     <div class="container-flex m-3">
         <div class="row">
             <div class="col border-bottom">
-                <h1 style="color: red;" class="d-flex justify-content-center">Listado de Rutas</h1>
+                <h1 style="color: red;" class="d-flex justify-content-center">Listado de clientes</h1>
             </div>
         </div>
 
@@ -33,7 +33,7 @@
                                     <td>{{ cliente.apellido }}</td>
                                     <td>{{ cliente.email }}</td>
                                     <td>
-                                        <p>Detalles a futuro.</p>
+                                        <a href="{% url 'lista_reservas_cliente' cliente.id %}">Ver reservas</a>
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca de Nosotros</title>
+    <!-- Enlaces a Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- Agrega aquí los enlaces a tus archivos CSS si los tienes -->
+    <style>
+        /* Estilos personalizados */
+        body {
+            background-color: #ffe6cc; /* Fondo de color cálido */
+            font-size: 16px; /* Aumentar el tamaño de la fuente predeterminada */
+        }
+
+        .container {
+            padding-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: justify;
+            font-size: 18px; /* Aumentar el tamaño de la letra en los párrafos */
+        }
+
+        h2 {
+            font-size: 24px; /* Aumentar el tamaño de la letra en los títulos h2 */
+        }
+
+        .img-container {
+            text-align: center;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            max-height: 300px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .pie-foto {
+            text-align: center;
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .main-container {
+            background-color: #ffffff; /* Fondo blanco del bloque de texto */
+            padding: 20px; /* Márgenes internos */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+            margin-top: 20px; /* Margen superior */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Mi Proyecto de Reservas</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'buscar_rutas' %}">Reservar Pasaje</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'viajes_disponibles' %}">Rutas de Hoy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_us' %}">¿Quiénes somos?</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Verifica si el usuario está autenticado -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <!-- Muestra el nombre del usuario -->
+                            <span class="nav-link">¡Hola, {{ user.username }}!</span>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Agrega el botón "Admin" al lado del nombre del usuario -->
+                            <a class="nav-link btn btn-primary" href="{% url 'index' %}">Admin</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <!-- Si el usuario no está autenticado, muestra el enlace de "Iniciar Sesión" -->
+                            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a> 
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h1>Acerca de Nosotros</h1>
+        <div class="main-container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="img-container">
+                        <img src="{% static 'img/user.jpg' %}" alt="Creador">
+                    </div>
+                    <div class="pie-foto">Creado por Eduardo Morán</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="container">
+                        <h2>Objetivo General:</h2>
+                        <p>
+                            Desarrollar un sistema de reservas de autobuses para una empresa de transporte que opera en la Séptima Región de Chile.
+                            El sistema permitirá a los clientes reservar pasajes a diferentes destinos regionales, y a los administradores gestionar
+                            la información relacionada con los buses y rutas disponibles.
+                        </p>
+                
+                        <h2>Objetivos Específicos:</h2>
+                        <p>
+                            Crear para el Usuario cliente, una interfaz donde pueda cotizar y ver los viajes disponibles para el viaje que desea,
+                            seleccionando el día y hora de dicho viaje junto a su asiento.
+                        </p>
+                        <p>
+                            Crear para el Usuario Administrador una interfaz de manejo de información relevante para mantener el sistema, junto a
+                            visualizaciones de las últimas compras realizadas.
+                        </p>
+                
+                        <h2>Alcance:</h2>
+                        <p>
+                            Crear la aplicación para una empresa de bus, el cual pueda administrar tanto los buses, rutas, disponibilidad y a su vez
+                            una interfaz para el usuario cliente que pueda efectuar la reserva en sí.
+                        </p>
+                        <p>
+                            Visualización de rutas y horarios disponibles.
+                        </p>
+                        <p>
+                            Reserva de pasajes y selección de asientos.
+                        </p>
+                        <p>
+                            Gestión de autobuses y rutas por parte de los administradores.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap y archivos JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+

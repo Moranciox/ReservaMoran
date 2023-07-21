@@ -22,12 +22,11 @@
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Ruta</th>
-                                <th>Asientos Disponibles</th>
-                                <th>Precio</th>
                                 <th>
                                     Acciones
-                                    <a href="{% url 'add_disponibilidad' %}" class="nav-link">Crear Disponibilidad</a>
-                                    
+                                    <a href="{% url 'add_disponibilidad' %}" class="text-decoration-none text-black">
+                                        <button type="button" class="btn btn-success">Añadir Disponibilidad</button>
+                                    </a>
                                 </th>
                             </tr>
                         </thead>
@@ -38,8 +37,6 @@
                                     <td>{{ disponibilidad.fecha }}</td>
                                     <td>{{ disponibilidad.horario }}</td>
                                     <td>{{ disponibilidad.ruta.origen }} a {{ disponibilidad.ruta.destino }}</td>
-                                    <td>{{ disponibilidad.asiento.bus.cantidadAsientos }}</td>  <!-- Muestra la cantidad de asientos disponibles -->
-                                    <td>{{ disponibilidad.asiento.bus.precio }}</td>  <!-- Muestra el precio -->
                                     <td>
                                         <a class="btn btn-secondary btn-sm" href="{% url 'edit_disponibilidad' disponibilidad.id %}">Editar</a>
                                         <a class="btn btn-danger btn-sm" href="{% url 'del_disponibilidad' disponibilidad.id %}">Eliminar</a>

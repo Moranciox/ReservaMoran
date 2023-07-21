@@ -2,43 +2,177 @@
 <html>
 <head>
     <title>Reservar Pasaje</title>
-    <!-- Incluir enlaces a Bootstrap -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+
+        body {
+            background-color: #ffe6cc; /* Color de fondo cálido */
+            font-size: 16px; /* Aumentar el tamaño de la fuente predeterminada */
+        }
+
+        .content-block {
+            background-color: #fff; /* Color de fondo del bloque */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+            padding: 20px;
+            margin: 20px auto; /* Centrar el bloque verticalmente */
+            max-width: 600px; /* Limitar el ancho del bloque */
+        }
+
+        .asientos-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Hacer que los asientos se muestren en varias filas */
+        }
+
+        .form-check-inline {
+            width: 16.66%; /* 6 columnas en un row de 12 columnas */
+            padding: 5px;
+        }
+
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center; /* Centrar el texto dentro del contenedor */
+        }
+
+        .center-title {
+            text-align: center; /* Centrar el título "Asientos Disponibles" */
+        }
+
+        /* Estilos para el formulario de información del cliente */
+        .cliente-form {
+            max-width: 400px; /* Limitar el ancho del formulario */
+            margin: 0 auto; /* Centrar el formulario horizontalmente */
+        }
+
+        .cliente-form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cliente-form input[type="text"],
+        .cliente-form input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .cliente-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cliente-form button:hover {
+            background-color: #218838;
+        }
+
+        /* Estilos para "Detalles del Viaje" */
+        .detalles-viaje {
+            text-align: center; /* Centrar el bloque "Detalles del Viaje" */
+            font-size: 24px; /* Aumentar el tamaño de la fuente */
+            margin-bottom: 20px; /* Espacio inferior para separar del siguiente bloque */
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <h1>Reservar Pasaje</h1>
-        <h2>Detalles del Viaje:</h2>
-        <p>Fecha: {{ disponibilidad.fecha }}</p>
-        <p>Hora: {{ disponibilidad.horario }}</p>
-        <p>Ruta: {{ disponibilidad.ruta }}</p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Mi Proyecto de Reservas</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
 
-        <h2>Asientos Disponibles:</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-check">
-                {% for asiento in asientos_disponibles %}
-                    <input type="checkbox" id="asiento_{{ asiento.numero }}" name="asientos" value="{{ asiento.numero }}" {% if not asiento.estado %}disabled{% endif %}>
-                    <label for="asiento_{{ asiento.numero }}" {% if not asiento.estado %}class="asiento-no-disponible"{% endif %}>Asiento {{ asiento.numero }}</label><br>
-                {% endfor %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'buscar_rutas' %}">Reservar Pasaje</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Rutas de Hoy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">¿Quiénes somos?</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Verifica si el usuario está autenticado -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <!-- Muestra el nombre del usuario -->
+                            <span class="nav-link">¡Hola, {{ user.username }}!</span>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Agrega el botón "Admin" al lado del nombre del usuario -->
+                            <a class="nav-link btn btn-primary" href="{% url 'index' %}">Admin</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <!-- Si el usuario no está autenticado, muestra el enlace de "Iniciar Sesión" -->
+                            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a> 
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
+        </div>
+    </nav>
+    <div class="container mt-4 content-block">
+        <h1 class="text-center">Reservar Pasaje</h1>
+        <div class="detalles-viaje">
+            <h2>Detalles del Viaje:</h2>
+            <p>Fecha: {{ disponibilidad.fecha }}</p>
+            <p>Hora: {{ disponibilidad.horario }}</p>
+            <p>Ruta: {{ disponibilidad.ruta }}</p>
+        </div>
 
-            <h2>Información del Cliente:</h2>
-            {{ cliente_form.as_p }}
+        <h2 class="center-title">Asientos Disponibles:</h2> <!-- Aplicar la clase center-title al título -->
+        <div class="center-content"> <!-- Agregar el contenedor para centrar los asientos -->
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-check asientos-container">
+                    {% for asiento in asientos_disponibles %}
+                        <div class="form-check-inline">
+                            <input type="checkbox" id="asiento_{{ asiento.numero }}" name="asientos" value="{{ asiento.numero }}" {% if not asiento.estado %}disabled{% endif %}>
+                            <label for="asiento_{{ asiento.numero }}" {% if not asiento.estado %}class="asiento-no-disponible"{% endif %}>Asiento {{ asiento.numero }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+    
+                <h2>Información del Cliente:</h2>
+                <div class="center-content">
+                    <label for="id_nombre">Nombre:</label>
+                    <input type="text" id="id_nombre" name="nombre" required>
+                    <label for="id_apellido">Apellido:</label>
+                    <input type="text" id="id_apellido" name="apellido" required>
+                    <label for="id_email">Email:</label>
+                    <input type="email" id="id_email" name="email" required>
+                    <label for="id_rut">Rut:</label>
+                    <input type="text" id="id_rut" name="rut" required>
+                    <label for="id_telefono">Telefono:</label>
+                    <input type="text" id="id_telefono" name="telefono" required>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Reservar</button>
+            </form>
+        </div>
 
-            <button type="submit" class="btn btn-primary">Reservar</button>
-        </form>
     </div>
 
     <!-- Scripts de Bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Estilos CSS para los asientos no disponibles -->
-    <style>
-        .asiento-no-disponible {
-            text-decoration: line-through;
-            color: #999;
-        }
-    </style>
 </body>
 </html>
+

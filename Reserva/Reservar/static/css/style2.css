@@ -1,0 +1,56 @@
+/* Estilos personalizados */
+body {
+    background-color: #ffe6cc; /* Color de fondo cálido */
+}
+
+.buscador-container {
+    background-color: #fff; /* Color de fondo del contenedor */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+}
+
+.btn-buscar {
+    background-color: #28a745; /* Color verde */
+    border-color: #28a745;
+}
+
+.table {
+    background-color: #f8f9fa; /* Color de fondo de la tabla */
+}
+
+/* Estilos para centrar los campos del formulario */
+.form-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.reservar-container {
+    max-width: 600px; /* Ajustar el ancho del contenedor de reserva según sea necesario */
+}
+
+/* Estilos para la disposición de los asientos en filas de a 6 */
+.asientos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.form-check-inline {
+    margin: 5px;
+}
+
+/* Estilos para la rueda de movimiento en el contenedor de asientos */
+.asientos-container {
+    overflow-x: auto;
+    white-space: nowrap;
+}

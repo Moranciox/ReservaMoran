@@ -1,9 +1,48 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Inicio</title>
     <!-- Incluir enlaces a Bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        /* Estilos personalizados */
+        body {
+            position: relative; /* Asegura que los elementos posicionados sean relativos a body */
+            font-size: 16px; /* Aumentar el tamaño de la fuente predeterminada */
+            color: #333333; /* Color del texto en negro */
+            margin: 0;
+            padding: 0;
+            background-image: url("{% static 'img/bus_background.jpg' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1; /* Asegura que el contenido esté encima del fondo */
+        }
+
+        .content-block {
+            background-color: rgba(255, 255, 255, 0.8); /* Color de fondo semitransparente */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+            padding: 20px;
+            max-width: 600px; /* Limitar el ancho del bloque */
+            font-weight: bold; /* Texto en negrita */
+            margin: 0 auto; /* Centrar el bloque horizontalmente */
+            margin-top: 100px; /* Espacio superior para centrar verticalmente */
+        }
+
+        .center-title {
+            text-align: center; /* Centrar el título "Reserva de pasajes Moran" */
+            font-size: 32px; /* Aumentar el tamaño del título */
+            margin-top: 100px; /* Espacio superior para centrar verticalmente */
+            color: #000; /* Color del texto en negro */
+            font-weight: bold; /* Texto en negrita */
+        }
+    </style>
 </head>
 <body>
 
@@ -17,7 +56,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <!-- Demás botones del navbar -->
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Inicio</a>
                 </li>
@@ -25,10 +64,10 @@
                     <a class="nav-link" href="{% url 'buscar_rutas' %}">Reservar Pasaje</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Rutas de Hoy</a>
+                    <a class="nav-link" href="{% url 'viajes_disponibles' %}">Rutas de Hoy</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">¿Quiénes somos?</a>
+                    <a class="nav-link" href="{% url 'about_us' %}">¿Quiénes somos?</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -54,9 +93,13 @@
 </nav>
 
 <!-- Contenido de la página de inicio -->
-<div class="container mt-4">
-    <h1>Bienvenido a la página de inicio</h1>
-    <p>Aquí puedes agregar contenido para la página de inicio.</p>
+<div class="container">
+    <div class="center-title">
+        <strong>Reserva de pasajes Moran</strong>
+    </div>
+    <div class="content-block">
+        <h1>Bienvenido a la página de inicio</h1>
+    </div>
 </div>
 
 <!-- Scripts de Bootstrap -->
@@ -64,5 +107,4 @@
 
 </body>
 </html>
-
 

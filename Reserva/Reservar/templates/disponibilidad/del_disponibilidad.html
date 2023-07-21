@@ -3,21 +3,39 @@
 
 {% block title %}Eliminar Disponibilidad{% endblock %}
 
-{% block content %}
-    <div class="container mt-4">
-        <h1>Eliminar Disponibilidad</h1>
-        <p>¿Estás seguro de que deseas eliminar la siguiente disponibilidad?</p>
-        <p>ID: {{ disponibilidad.id }}</p>
-        <p>Horario: {{ disponibilidad.horario }}</p>
-        <p>Fecha: {{ disponibilidad.fecha }}</p>
-        <!-- Muestra los demás campos aquí -->
 
-        <form method="post">
-            {% csrf_token %}
-            {% buttons %}
-                <button class="btn btn-danger" type="submit">Eliminar</button>
-                <a class="btn btn-secondary" href="{% url 'list_disponibilidad' %}">Cancelar</a>
-            {% endbuttons %}
-        </form>
+{% block content %}
+<style>
+    .center-block {
+        width: 50%;
+        margin: 0 auto;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: grey;
+    }
+</style>
+    <div class="row">
+        <div class="col border-bottom">
+            <h1 style="color: red;" class="d-flex justify-content-center">Eliminar Disponibilidad</h1>
+        </div>
     </div>
+
+    
+        <hr>
+        <div class="center-block">
+            <form method="POST">
+                <div class="d-flex justify-content-center">
+                    
+                    <h4>Se eliminará la disponibilidad del viaje con fecha "<b>{{ disponibilidad.fecha }}</b>" a las "<b>{{ disponibilidad.horario }}</b>"</h4>
+                </div>
+                {% csrf_token %}
+                {{ formulario }}
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-secondary btn-sm" href="{% url 'list_disponibilidad' %}">Cancelar</a>
+                    <input class="btn btn-danger btn-sm" type="submit" value="Confirmar">
+                </div>
+            </form>
+        </div>
+    
+    
 {% endblock %}

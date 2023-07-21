@@ -1,92 +1,140 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inicio</title>
-    <!-- Incluir enlaces a Bootstrap -->
+    <title>Buscador de Rutas Disponibles</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+
+        body {
+            background-color: #ffe6cc; /* Color de fondo cálido */
+        }
+
+        .buscador-container {
+            background-color: #fff; /* Color de fondo del contenedor */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+        }
+
+        .btn-buscar {
+            background-color: #28a745; /* Color verde */
+            border-color: #28a745;
+        }
+
+        .table {
+            background-color: #f8f9fa; /* Color de fondo de la tabla */
+        }
+
+        /* Estilos para centrar los campos del formulario */
+        .form-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Mi Proyecto de Reservas</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">Mi Proyecto de Reservas</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <!-- Demás botones del navbar -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'buscar_rutas' %}">Reservar Pasaje</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Rutas de Hoy</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">¿Quiénes somos?</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <!-- Verifica si el usuario está autenticado -->
-                {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <!-- Muestra el nombre del usuario -->
-                        <span class="nav-link">¡Hola, {{ user.username }}!</span>
+                        <a class="nav-link" href="{% url 'home' %}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <!-- Agrega el botón "Admin" al lado del nombre del usuario -->
-                        <a class="nav-link btn btn-primary" href="{% url 'index' %}">Admin</a>
+                        <a class="nav-link" href="{% url 'buscar_rutas' %}">Reservar Pasaje</a>
                     </li>
-                {% else %}
                     <li class="nav-item">
-                        <!-- Si el usuario no está autenticado, muestra el enlace de "Iniciar Sesión" -->
-                        <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a> 
+                        <a class="nav-link" href="{% url 'viajes_disponibles' %}">Rutas de Hoy</a>
                     </li>
-                {% endif %}
-            </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_us' %}">¿Quiénes somos?</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Verifica si el usuario está autenticado -->
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <!-- Muestra el nombre del usuario -->
+                            <span class="nav-link">¡Hola, {{ user.username }}!</span>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Agrega el botón "Admin" al lado del nombre del usuario -->
+                            <a class="nav-link btn btn-primary" href="{% url 'index' %}">Admin</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <!-- Si el usuario no está autenticado, muestra el enlace de "Iniciar Sesión" -->
+                            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a> 
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
+    </nav>
+    <div class="container mt-4 buscador-container">
+        <h1 class="text-center mb-4">Buscador de Rutas Disponibles</h1>
+        <form class="row g-3 form-center" method="GET" action="{% url 'buscar_rutas' %}">
+            <div class="col-md-3">
+                <label for="id_origen" class="form-label">Origen:</label>
+                <input type="text" id="id_origen" name="origen" class="form-control" placeholder="Ingrese el origen">
+            </div>
+            <div class="col-md-2">
+                <label for="id_fecha" class="form-label">Fecha:</label>
+                <input type="date" id="id_fecha" name="fecha" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label for="id_hora" class="form-label">Hora:</label>
+                <input type="time" id="id_hora" name="hora" class="form-control">
+            </div>
+            <div class="col-md-2 d-grid">
+                <label class="form-label" style="opacity: 0;">&nbsp;</label>
+                <button type="submit" class="btn btn-buscar btn-block">Buscar</button>
+            </div>
+        </form>
+
+        {% if disponibilidades %}
+        <h2 class="mt-4 text-center">Resultados de la búsqueda:</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Fecha de Viaje</th>
+                        <th>Hora de Salida</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for disponibilidad in disponibilidades %}
+                        <tr>
+                            <td><strong>{{ disponibilidad.fecha }}</strong></td>
+                            <td>{{ disponibilidad.horario }}</td>
+                            <td>{{ disponibilidad.ruta.origen }}</td>
+                            <td>{{ disponibilidad.ruta.destino }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="{% url 'reserva_pasaje' disponibilidad.id %}">Reservar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="mt-4 text-center">No hay viajes disponibles.</p>
+        {% endif %}
     </div>
-</nav>
 
-<!-- Contenido de la página de inicio -->
-<div class="container mt-4">
-    <h1>Buscador de Rutas Disponibles</h1>
-    <form method="GET" action="{% url 'buscar_rutas' %}">
-        <div class="form-group">
-            <label for="id_origen">Origen:</label>
-            <input type="text" id="id_origen" name="origen" class="form-control" placeholder="Ingrese el origen">
-        </div>
-        <div class="form-group">
-            <label for="id_fecha">Fecha:</label>
-            <input type="date" id="id_fecha" name="fecha" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="id_hora">Hora:</label>
-            <input type="time" id="id_hora" name="hora" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
-
-    {% if disponibilidades %}
-    <h2>Resultados de la búsqueda:</h2>
-    <ul>
-        {% for disponibilidad in disponibilidades %}
-            <li>{{ disponibilidad.fecha }} - {{ disponibilidad.horario }} - {{ disponibilidad.ruta }}</li>
-            <a class="btn btn-primary" href="{% url 'reserva_pasaje' disponibilidad.id %}">Reservar</a>
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>No hay viajes disponibles.</p>
-    {% endif %}
-</div>
-
-<!-- Scripts de Bootstrap -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Scripts de Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

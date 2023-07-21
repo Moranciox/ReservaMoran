@@ -9,65 +9,104 @@ from django.utils import timezone
 from .models import Bus, Ruta, Cliente, Disponibilidad, Asientos, Reserva
 ##from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .forms import BusForm, RutaForm, CliForm, DisponibilidadForm, BusquedaRutasForm, ClienteForm
+from django.db import IntegrityError
+from datetime import date
+
+def about_us(request):
+    # Puedes agregar cualquier información que desees mostrar en la página "Acerca de nosotros"
+    context = {
+        'titulo': 'Acerca de Nosotros',
+        'contenido': 'Somos una empresa ficticia dedicada a ofrecer servicios de transporte de alta calidad. Nuestro equipo está comprometido con brindar la mejor experiencia de viaje a nuestros clientes.',
+    }
+    return render(request, 'about_us.html', context)
+
+def viajes_disponibles(request):
+    # Obtener los viajes disponibles para el día de hoy
+    viajes_hoy = Disponibilidad.objects.filter(fecha=date.today())
+
+    # Renderizar la plantilla con la lista de viajes disponibles
+    return render(request, 'viajes_disponibles.html', {'viajes_hoy': viajes_hoy})
+
+
+@login_required
+def lista_reservas_cliente(request, cliente_id):
+    cliente = Cliente.objects.get(pk=cliente_id)
+    reservas = Reserva.objects.filter(cliente=cliente)
+    context = {
+        'cliente': cliente,
+        'reservas': reservas,
+    }
+    return render(request, 'Clientes/lista_reservas_cliente.html', context)
+
 def reserva_pasaje(request, disponibilidad_id):
     disponibilidad = get_object_or_404(Disponibilidad, id=disponibilidad_id)
-
-    # Obtener los asientos disponibles para esta disponibilidad
     asientos_disponibles = Asientos.objects.filter(
         bus=disponibilidad.bus,
-        estado=True,  # Marcamos el estado como disponible
+        estado=True,
         disponibilidad__fecha=disponibilidad.fecha,
         disponibilidad__horario=disponibilidad.horario
     )
 
     if request.method == 'POST':
-        # Obtener los asientos seleccionados y la información del cliente del formulario
         asientos_seleccionados = request.POST.getlist('asientos')
-        cliente_form = ClienteForm(request.POST)
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        email = request.POST.get('email')
+        rut = request.POST.get('rut')
+        telefono = request.POST.get('telefono')
 
-        if cliente_form.is_valid():
-            cliente = cliente_form.save()  # Guardar los datos del cliente en la base de datos
+        # Verificar si el cliente ya existe en la base de datos
+        try:
+            cliente = Cliente.objects.get(email=email, rut=rut)
+            # Si el cliente ya existe, actualizamos sus datos con lo ingresado en el formulario
+            cliente.nombre = nombre
+            cliente.apellido = apellido
+            cliente.telefono = telefono
+            cliente.save()
+        except Cliente.DoesNotExist:
+            # Si el cliente no existe, lo creamos
+            cliente = Cliente.objects.create(nombre=nombre, apellido=apellido, email=email, rut=rut, telefono=telefono)
 
-            for asiento_numero in asientos_seleccionados:
-                # Buscar el asiento seleccionado
-                asiento = Asientos.objects.get(bus=disponibilidad.bus, numero=asiento_numero)
+        # Crear y guardar el registro de reserva con las fechas correctas
+        reserva = Reserva(
+            fechaReserva=datetime.combine(disponibilidad.fecha, disponibilidad.horario),  # Fecha y hora de la disponibilidad
+            fechaCreacion=timezone.now(),  # Fecha de creación de la reserva (fecha actual)
+            cantidadPasajes=len(asientos_seleccionados),  # Cantidad de asientos seleccionados
+            cliente=cliente,
+            ruta=disponibilidad.ruta,
+            bus=disponibilidad.bus,
+        )
+        reserva.save()
 
-                # Asignar el cliente y el asiento seleccionado a la disponibilidad
-                disponibilidad.cliente = cliente
-                disponibilidad.asiento = asiento
-
-                # Cambiar el estado del asiento a no disponible
+        # Asignar los asientos seleccionados a la reserva y marcarlos como no disponibles
+        asientos_reserva = []
+        for asiento_numero in asientos_seleccionados:
+            # Utilizamos filter() en lugar de get()
+            asientos = Asientos.objects.filter(bus=disponibilidad.bus, numero=asiento_numero, estado=True)
+            if asientos.exists():
+                asiento = asientos.first()  # Tomamos el primer asiento disponible de los que coinciden
                 asiento.estado = False
                 asiento.save()
+                asientos_reserva.append(asiento)
 
-                # Marcar la disponibilidad como no disponible
-                disponibilidad.disponible = False
-                disponibilidad.save()
+        # Guardar los asientos seleccionados en la reserva
+        for asiento in asientos_reserva:
+            reserva.asientos.add(asiento)
 
-                # Crear y guardar la reserva con las fechas correctas
-                reserva = Reserva(
-                    fechaReserva=timezone.now(),  # Fecha y hora actual de la reserva
-                    fechaCreacion=timezone.now(),  # Fecha de creación de la reserva (fecha actual)
-                    cantidadPasajes=1,  # Puedes ajustar esto según tus necesidades
-                    cliente=cliente,
-                    ruta=disponibilidad.ruta,
-                    bus=disponibilidad.bus,
-                    asiento=asiento,
-                )
-                reserva.save()
+        # Marcar la disponibilidad como no disponible
+        disponibilidad.disponible = False
+        disponibilidad.save()
 
-            # Redirigir a una página de confirmación o a donde desees
-            return render(request, 'cliente/confirmacion_reserva.html', {'disponibilidad': disponibilidad, 'cliente': cliente})
-
-    else:
-        cliente_form = ClienteForm()
+        # Redirigir a una página de confirmación o a donde desees
+        return render(request, 'cliente/confirmacion_reserva.html', {'disponibilidad': disponibilidad, 'cliente': cliente, 'reserva': reserva})
 
     contexto = {
         'disponibilidad': disponibilidad,
         'asientos_disponibles': asientos_disponibles,
-        'cliente_form': cliente_form,
     }
     return render(request, 'cliente/reserva_pasaje.html', contexto)
+
+
 
 def buscar_rutas(request):
     if request.method == 'GET':
@@ -92,6 +131,7 @@ def buscar_rutas(request):
         return render(request, 'cliente/reserva.html', context)
 
     return render(request, 'cliente/reserva.html')
+
 @login_required
 def index(request):
     return render(request, 'index.html')
@@ -224,6 +264,7 @@ def del_ruta(request, pk):
     }
     return render(request, 'rutas/del_rutas.html', contexto)
 
+@login_required
 def list_disponibilidad(request):
     disponibilidades = Disponibilidad.objects.all()
     buses = Bus.objects.all()
@@ -276,6 +317,7 @@ def edit_disponibilidad(request, pk):
     }
     return render(request, 'disponibilidad/edit_disponibilidad.html', context)
 
+@login_required
 def del_disponibilidad(request, pk):
     disponibilidad = get_object_or_404(Disponibilidad, pk=pk)
 
@@ -288,11 +330,13 @@ def del_disponibilidad(request, pk):
     }
     return render(request, 'disponibilidad/del_disponibilidad.html', context)
 
+@login_required
 def list_asientos(request, bus_id):
     bus = get_object_or_404(Bus, pk=bus_id)
     asientos = bus.asientos.all()
     return render(request, 'asiento/list_asientos.html', {'bus': bus, 'asientos': asientos})
 
+@login_required
 def add_asiento(request, bus_id):
     bus = get_object_or_404(Bus, pk=bus_id)
 
@@ -307,6 +351,7 @@ def add_asiento(request, bus_id):
     asiento_form = AsientoForm()
     return render(request, 'asiento/add_asiento.html', {'bus': bus, 'form': asiento_form})
 
+@login_required
 def edit_asiento(request, bus_id, asiento_id):
     bus = get_object_or_404(Bus, pk=bus_id)
     asiento = get_object_or_404(Asiento, pk=asiento_id)
@@ -320,6 +365,7 @@ def edit_asiento(request, bus_id, asiento_id):
     asiento_form = AsientoForm(instance=asiento)
     return render(request, 'asiento/edit_asiento.html', {'bus': bus, 'form': asiento_form})
 
+@login_required
 def del_asiento(request, bus_id, asiento_id):
     bus = get_object_or_404(Bus, pk=bus_id)
     asiento = get_object_or_404(Asiento, pk=asiento_id)

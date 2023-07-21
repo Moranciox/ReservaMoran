@@ -32,6 +32,9 @@ urlpatterns = [
 
     path('reserva/', buscar_rutas, name='buscar_rutas'),
     path('reserva/<int:disponibilidad_id>/', reserva_pasaje, name='reserva_pasaje'),
+    path('cliente/<int:cliente_id>/reservas/', lista_reservas_cliente, name='lista_reservas_cliente'),
+    path('viajes-disponibles/', viajes_disponibles, name='viajes_disponibles'),
+    path('about_us/', about_us, name='about_us'),
 ]
 
 if settings.DEBUG:
